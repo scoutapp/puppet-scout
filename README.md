@@ -11,7 +11,7 @@ Installs the agent for [Scout](http://scoutapp.com), a hosted server monitoring 
 class {
         'scout':
             key => '0mZ6BD9DR0qyZjaBLCPZZWkW3n2Wn7DV9xp5gQPs',
-    }
+}
 ```
 
 ## Required Parameters
