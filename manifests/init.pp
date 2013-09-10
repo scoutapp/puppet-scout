@@ -36,7 +36,7 @@ class scout(
     }
 
     if ($environment) {
-      $environment_param = "-e=${environment}" 
+      $environment_param = "-e ${environment}" 
     }
 
     if ($roles != []) {
