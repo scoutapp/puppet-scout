@@ -24,6 +24,7 @@ class scout(
   $ensure = present,
   $server_name = false,
   $roles = [],
+  $environment = false,
   $http_proxy = false,
   $https_proxy = false,
   $user = 'scout',
@@ -34,8 +35,12 @@ class scout(
       $server_name_param = "--name ${server_name}"
     }
 
+    if ($environment) {
+      $environment_param = "-e=${environment}" 
+    }
+
     if ($roles != []) {
-      $roles_param = inline_template("-r <%= roles.join(',')%>") 
+      $roles_param = inline_template("-r <%= @roles.join(',')%>") 
     }
     
     if ($http_proxy) {
@@ -69,7 +74,7 @@ class scout(
     cron { "scout":
         ensure => $ensure,
         user => $user,
-        command => "${bin} ${key} ${server_name_param} ${roles_param} ${http_proxy_param} ${https_proxy_param}",
+        command => "${bin} ${key} ${environment_param} ${server_name_param} ${roles_param} ${http_proxy_param} ${https_proxy_param}",
         require => Package["scout"],
         hour => "*",
         minute => "*"
