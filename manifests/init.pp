@@ -52,17 +52,22 @@ class scout(
     }
     
     if ($user != 'root') {
-      group { $group:
+      if (!defined(Group[$group])) {
+        group { $group:
               ensure => present,
               # gid => 1000
+        }
       }
-      user { $user:
-         groups => $group,
-         gid => $group,
-         comment => 'This user was created by Puppet',
-         ensure => present,
-         managehome => true,
-         require => Group[$group]
+      
+      if (!defined(User[$user])) {
+        user { $user:
+                groups => $group,
+                gid => $group,
+                comment => 'This user was created by Puppet',
+                ensure => present,
+                managehome => true,
+                require => Group[$group]
+        }
       }
     }
 
