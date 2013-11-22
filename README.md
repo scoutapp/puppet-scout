@@ -77,6 +77,11 @@ class {
       <td>The full path to the scout gem executable. When <code>nil</code>, this is discovered via <code>Gem#bindir</code>.</td>
       <td><code>nil</code></td>
     </tr>
+    <tr>
+      <td>plugin_pubkey</td>
+      <td>Content of the private Plugin's public key. When not <code>nil</code>, key file is created in ~/.scout/scout_rsa.pub in home directory of user running scout.</td>
+      <td><code>nil</code></td>
+    </tr>
   </tbody>
 </table>
 
