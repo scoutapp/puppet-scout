@@ -28,7 +28,8 @@ class scout(
   $http_proxy = false,
   $https_proxy = false,
   $user = 'scout',
-  $group = 'scout'
+  $group = 'scout',
+  $plugin_pubkey = ''
 ) {  
     # build the parameters for the scout command.
     if ($server_name) {
@@ -83,6 +84,18 @@ class scout(
         require => Package["scout"],
         hour => "*",
         minute => "*"
+    }
+
+    if ($plugin_pubkey != '') {
+      file { 'scout_plugin_pub_key':
+      	ensure => present,
+        path => "/home/${user}/.scout/scout_rsa.pub",
+        content => $plugin_pubkey,
+        user => $user,
+        group => $group,
+        mode => 0644,
+        require => Package['scout']
+      }
     }
  
     # install any plugin gem dependencies
