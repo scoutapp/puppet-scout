@@ -91,7 +91,7 @@ class scout(
       	ensure => present,
         path => "/home/${user}/.scout/scout_rsa.pub",
         content => $plugin_pubkey,
-        user => $user,
+        owner => $user,
         group => $group,
         mode => 0644,
         require => Package['scout']
