@@ -19,7 +19,7 @@
 #
 class scout(
   $key,
-  $bin = inline_template('<%= Gem.bindir%>/scout'),
+  $bin = inline_template("<%= Gem.bindir%>/scout"),
   $gems = false,
   $ensure = present,
   $server_name = false,
@@ -41,7 +41,7 @@ class scout(
     }
 
     if ($roles != []) {
-      $roles_param = inline_template('-r <%= @roles.join(',')%>')
+      $roles_param = inline_template("-r <%= @roles.join(',')%>")
     }
 
     if ($http_proxy) {
