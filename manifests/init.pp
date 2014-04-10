@@ -30,28 +30,28 @@ class scout(
   $user = 'scout',
   $group = 'scout',
   $plugin_pubkey = ''
-) {  
+) {
     # build the parameters for the scout command.
     if ($server_name) {
       $server_name_param = "--name ${server_name}"
     }
 
     if ($environment) {
-      $environment_param = "-e ${environment}" 
+      $environment_param = "-e ${environment}"
     }
 
     if ($roles != []) {
-      $roles_param = inline_template("-r <%= @roles.join(',')%>") 
+      $roles_param = inline_template("-r <%= @roles.join(',')%>")
     }
-    
+
     if ($http_proxy) {
       $http_proxy_param = "--http-proxy ${http_proxy}"
     }
-    
+
     if ($https_proxy) {
       $https_proxy_param = "--https-proxy ${https_proxy}"
     }
-    
+
     if ($user != 'root') {
       if (!defined(Group[$group])) {
         group { $group:
@@ -59,51 +59,57 @@ class scout(
               # gid => 1000
         }
       }
-      
+
       if (!defined(User[$user])) {
         user { $user:
-                groups => $group,
-                gid => $group,
-                comment => 'This user was created by Puppet',
-                ensure => present,
+                ensure     => present,
+                groups     => $group,
+                gid        => $group,
+                comment    => 'This user was created by Puppet',
                 managehome => true,
-                require => Group[$group]
+                require    => Group[$group]
+        }
+        file { '/home/scout/.scout':
+          ensure  => directory,
+          owner   => $user,
+          group   => $group,
+          require => User[$user],
         }
       }
     }
 
-    package { "scout":
+    package { 'scout':
+        ensure   => latest,
         provider => gem,
-        ensure => latest
     }
- 
-    cron { "scout":
-        ensure => $ensure,
-        user => $user,
+
+    cron { 'scout':
+        ensure  => $ensure,
+        user    => $user,
         command => "${bin} ${key} ${environment_param} ${server_name_param} ${roles_param} ${http_proxy_param} ${https_proxy_param}",
-        require => Package["scout"],
-        hour => "*",
-        minute => "*"
+        require => Package['scout'],
+        hour    => '*',
+        minute  => '*'
     }
 
     if ($plugin_pubkey != '') {
       file { 'scout_plugin_pub_key':
-      	ensure => present,
-        path => "/home/${user}/.scout/scout_rsa.pub",
+        ensure  => present,
+        path    => "/home/${user}/.scout/scout_rsa.pub",
         content => $plugin_pubkey,
-        owner => $user,
-        group => $group,
-        mode => 0644,
-        require => Package['scout']
+        owner   => $user,
+        group   => $group,
+        mode    => '0644',
+        require => [Package['scout'], User[$user]],
       }
     }
- 
+
     # install any plugin gem dependencies
     if $gems {
       if (!defined(Package[$gems])) {
         package { $gems:
+            ensure   => latest,
             provider => gem,
-            ensure   => latest
         }
       }
     }
