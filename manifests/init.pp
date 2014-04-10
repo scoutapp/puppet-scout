@@ -69,6 +69,12 @@ class scout(
                 managehome => true,
                 require    => Group[$group]
         }
+        file { '/home/scout/.scout':
+          ensure  => directory,
+          owner   => $user,
+          group   => $group,
+          require => User[$user],
+        }
       }
     }
 
