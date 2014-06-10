@@ -68,6 +68,21 @@ class {
       <td><code>nil</code></td>
     </tr>
     <tr>
+      <td>environment</td>
+      <td>Specify the environment, like 'production' or 'staging' this server lives in. See https://www.scoutapp.com/help#overview_of_environments for more details.</td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
+      <td>http_proxy</td>
+      <td>Set an HTTP proxy if one is required to communicate with the Scoutapp service from your environment.</td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
+      <td>https_proxy</td>
+      <td>Set an HTTPS proxy if one is required to communicate with the Scoutapp service from your environment.</td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
       <td>gems</td>
       <td>An Array of plugin gem dependencies to install. For example, you may want to install the <code>redis</code> gem if this node uses the redis plugin.</td>
       <td><code>nil</code></td>
