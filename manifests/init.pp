@@ -106,11 +106,9 @@ class scout(
 
     # install any plugin gem dependencies
     if $gems {
-      if (!defined(Package[$gems])) {
-        package { $gems:
-            ensure   => latest,
-            provider => gem,
-        }
+      package { $gems:
+        ensure   => latest,
+        provider => gem,
       }
     }
 }
