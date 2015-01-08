@@ -18,89 +18,76 @@
 # Copyright 2013 Derek Haynes
 #
 class scout(
-  $key,
-  $bin = inline_template("<%= Gem.bindir%>/scout"),
-  $gems = false,
-  $ensure = present,
-  $server_name = false,
-  $roles = [],
+  $account_key,
+  $hostname = false,
+  $display_name = false,
+  $log_file = false,
   $environment = false,
+  $roles = false,
   $http_proxy = false,
   $https_proxy = false,
-  $user = 'scout',
-  $group = 'scout',
+  $gems = false,
+  $ensure = present,
   $plugin_pubkey = ''
 ) {
-    # build the parameters for the scout command.
-    if ($server_name) {
-      $server_name_param = "--name ${server_name}"
-    }
+    if $operatingsystem == 'Ubuntu' {
+      include apt
 
-    if ($environment) {
-      $environment_param = "-e ${environment}"
-    }
-
-    if ($roles != []) {
-      $roles_param = inline_template("-r <%= @roles.join(',')%>")
-    }
-
-    if ($http_proxy) {
-      $http_proxy_param = "--http-proxy ${http_proxy}"
-    }
-
-    if ($https_proxy) {
-      $https_proxy_param = "--https-proxy ${https_proxy}"
-    }
-
-    if ($user != 'root') {
-      if (!defined(Group[$group])) {
-        group { $group:
-              ensure => present,
-              # gid => 1000
-        }
+      apt::key { 'scout':
+        key        => "BA012E5E",
+        key_source => 'https://archive.scoutapp.com/scout-archive.key',
       }
 
-      if (!defined(User[$user])) {
-        user { $user:
-                ensure     => present,
-                groups     => $group,
-                gid        => $group,
-                comment    => 'This user was created by Puppet',
-                managehome => true,
-                require    => Group[$group]
-        }
-        file { "/home/${user}/.scout":
-          ensure  => directory,
-          owner   => $user,
-          group   => $group,
-          require => User[$user],
-        }
+      apt::source { 'scout':
+        location     => 'https://archive.scoutapp.com',
+        include_src  => false,
+        release      => 'ubuntu',
+        repos        => 'main',
+        before       => Package['scoutd'],
+        require      => Apt::Key['scout']
       }
     }
 
-    package { 'scout':
-        ensure   => latest,
-        provider => gem,
+    package { 'scoutd': ensure => latest }
+
+    service { 'scout':
+      ensure => "running",
+      enable => true,
+      require => Package['scoutd']
     }
 
-    cron { 'scout':
-        ensure  => $ensure,
-        user    => $user,
-        command => "${bin} ${key} ${environment_param} ${server_name_param} ${roles_param} ${http_proxy_param} ${https_proxy_param}",
-        require => Package['scout'],
-        hour    => '*',
-        minute  => '*'
+    file { "/var/lib/scoutd":
+      ensure  => directory,
+      owner => 'scoutd',
+      group => 'scoutd',
+      require => Package['scoutd']
+    }
+
+    file { "/var/lib/scoutd/.scout":
+      ensure  => directory,
+      owner   => 'scoutd',
+      group   => 'scoutd',
+      require => File['/var/lib/scoutd']
+    }
+
+    file { "/etc/scout/scoutd.yml":
+      ensure => present,
+      owner => 'scoutd',
+      group => 'scoutd',
+      content => template('scout/scout.yml.erb'),
+      require => Package['scoutd'],
+      notify => Service["scout"]
     }
 
     if ($plugin_pubkey != '') {
       file { 'scout_plugin_pub_key':
         ensure  => present,
-        path    => "/home/${user}/.scout/scout_rsa.pub",
+        path    => "/var/lib/scoutd/.scout/scout_rsa.pub",
         content => $plugin_pubkey,
-        owner   => $user,
-        group   => $group,
+        owner   => 'scoutd',
+        group   => 'scoutd',
         mode    => '0644',
-        require => [Package['scout'], User[$user]],
+        require => Package['scoutd'],
       }
     }
 

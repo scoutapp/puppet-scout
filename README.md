@@ -10,7 +10,7 @@ Installs the agent for [Scout](http://scoutapp.com), a hosted server monitoring 
 ```puppet
 class {
         'scout':
-            key => '0mZ6BD9DR0qyZjaBLCPZZWkW3n2Wn7DV9xp5gQPs',
+            account_key => '0mZ6BD9DR0qyZjaBLCPZZWkW3n2Wn7DV9xp5gQPs',
 }
 ```
 
@@ -26,7 +26,7 @@ class {
   </thead>
   <tbody>
     <tr>
-      <td style="width:15%">key</td>
+      <td style="width:15%">account_key</td>
       <td>
         The agent requires a Scout account and the account's associated key. The key can be found in the account settings tab within the Scout UI or in the server setup instructions. The key looks like:
           <code>0mZ6BD9DR0qyZjaBLCPZZWkW3n2Wn7DV9xp5gQPs</code> 
@@ -48,28 +48,28 @@ class {
   </thead>
   <tbody>
     <tr>
-      <td>user</td>
-      <td>User to run the Scout agent under. Will be created if it does not exist.</td>
-      <td><code>scout</code></td>
-    </tr>
-    <tr>
-      <td>group</td>
-      <td>User group to run the Scout agent under. Will be created if it does not exist.</td>
-      <td><code>scout</code></td>
-    </tr>
-    <tr>
-      <td>server_name</td>
-      <td>Optional name to display for this node within the Scout UI.</td>
+      <td>hostname</td>
+      <td>Optional hostname override for this node.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
-      <td>roles</td>
-      <td>An Array of roles for this node. Roles are defined through Scout's UI.</td>
+      <td>display_name</td>
+      <td>Optional name to display for this node within the Scout UI (defaults to the hostname).</td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
+      <td>log_file</td>
+      <td>Optional location of the log file.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
       <td>environment</td>
       <td>Specify the environment, like 'production' or 'staging' this server lives in. See https://www.scoutapp.com/help#overview_of_environments for more details.</td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
+      <td>roles</td>
+      <td>An Array of roles for this node. Roles are defined through Scout's UI.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
@@ -85,11 +85,6 @@ class {
     <tr>
       <td>gems</td>
       <td>An Array of plugin gem dependencies to install. For example, you may want to install the <code>redis</code> gem if this node uses the redis plugin.</td>
-      <td><code>nil</code></td>
-    </tr>
-    <tr>
-      <td>bin</td>
-      <td>The full path to the scout gem executable. When <code>nil</code>, this is discovered via <code>Gem#bindir</code>.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
