@@ -30,21 +30,33 @@ class scout(
   $ensure = present,
   $plugin_pubkey = ''
 ) {
-    if $operatingsystem == 'Ubuntu' {
-      include apt
+    case $operatingsystem {
+      'Ubuntu': {
+        apt::key { 'scout':
+          key        => "BA012E5E",
+          key_source => 'https://archive.scoutapp.com/scout-archive.key',
+        }
 
-      apt::key { 'scout':
-        key        => "BA012E5E",
-        key_source => 'https://archive.scoutapp.com/scout-archive.key',
+        apt::source { 'scout':
+          location     => 'https://archive.scoutapp.com',
+          include_src  => false,
+          release      => 'ubuntu',
+          repos        => 'main',
+          before       => Package['scoutd'],
+          require      => Apt::Key['scout']
+        }
       }
-
-      apt::source { 'scout':
-        location     => 'https://archive.scoutapp.com',
-        include_src  => false,
-        release      => 'ubuntu',
-        repos        => 'main',
-        before       => Package['scoutd'],
-        require      => Apt::Key['scout']
+      'RedHat', 'CentOS': {
+        yumrepo { 'scout':
+          baseurl => 'http://archive.scoutapp.com/rhel/$releasever/main/$basearch/',
+          gpgkey  => 'https://archive.scoutapp.com/RPM-GPG-KEY-scout'
+        }
+      }
+      'Fedora': {
+        yumrepo { 'scout':
+          baseurl => 'http://archive.scoutapp.com/fedora/$releasever/main/$basearch/',
+          gpgkey => 'https://archive.scoutapp.com/RPM-GPG-KEY-scout'
+        }
       }
     }
 
@@ -52,7 +64,6 @@ class scout(
 
     service { 'scout':
       ensure => "running",
-      enable => true,
       require => Package['scoutd']
     }
 
