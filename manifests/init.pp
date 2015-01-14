@@ -22,6 +22,7 @@ class scout(
   $hostname = false,
   $display_name = false,
   $log_file = false,
+  $ruby_path = false,
   $environment = false,
   $roles = false,
   $http_proxy = false,

@@ -63,6 +63,11 @@ class {
       <td><code>nil</code></td>
     </tr>
     <tr>
+      <td>ruby_path</td>
+      <td>Optional location of the ruby executable.</td>
+      <td><code>nil</code></td>
+    </tr>
+    <tr>
       <td>environment</td>
       <td>Specify the environment, like 'production' or 'staging' this server lives in. See https://www.scoutapp.com/help#overview_of_environments for more details.</td>
       <td><code>nil</code></td>
