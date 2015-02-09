@@ -2,8 +2,8 @@
 
 Installs the agent for [Scout](http://scoutapp.com), a hosted server monitoring service. This Puppet Module:
 
-* Installs the [Scout Ruby gem](https://rubygems.org/gems/scout)
-* Configures a Cron job to run the monitoring agent
+* Installs scoutd, the Scout monitoring daemon
+* Runs scoutd
 
 ## Basic Config
 
