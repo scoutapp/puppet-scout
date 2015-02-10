@@ -65,6 +65,7 @@ class scout(
 
     service { 'scout':
       ensure => "running",
+      start => 'scoutctl restart',
       require => Package['scoutd']
     }
 
