@@ -90,7 +90,7 @@ class scoutd(
       ensure  => present,
       owner   => 'scoutd',
       group   => 'scoutd',
-      content => template('scout/scout.yml.erb'),
+      content => template('scoutd/scout.yml.erb'),
       require => Package['scoutd'],
       notify  => Service['scout']
     }
