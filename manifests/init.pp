@@ -47,6 +47,33 @@ class scoutd(
           require     => Apt::Key['scout']
         }
       }
+      'Debian': {
+        apt::key { 'scout':
+          key        => 'BA012E5E',
+          key_source => 'https://archive.scoutapp.com/scout-archive.key',
+        }
+
+        case $::operatingsystemmajrelease {
+          8: {
+            $release = 'jessie'
+          }
+          7: {
+            $release = 'wheezy'
+          }
+          default: {
+            fail("${::operatingsystemmajrelease} is an unsupported version of Debian on ${::fqdn}")
+          }
+        }
+        apt::source { 'scout':
+          location    => 'https://archive.scoutapp.com',
+          include_src => false,
+          release     => $release,
+          repos       => 'main',
+          before      => Package['scoutd'],
+          require     => Apt::Key['scout']
+        }
+
+      }
       'RedHat', 'CentOS': {
         yumrepo { 'scout':
           baseurl => 'http://archive.scoutapp.com/rhel/$releasever/main/$basearch/',
