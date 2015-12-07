@@ -125,7 +125,7 @@ class scoutd(
     if ($plugin_pubkey != '') {
       file { 'scout_plugin_pub_key':
         ensure  => present,
-        path    => '/var/lib/scoutd/.scout/scout_rsa.pub',
+        path    => '/var/lib/scoutd/scout_rsa.pub',
         content => $plugin_pubkey,
         owner   => 'scoutd',
         group   => 'scoutd',
