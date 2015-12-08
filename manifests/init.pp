@@ -34,7 +34,7 @@ class scoutd(
   case $::operatingsystem {
       'Ubuntu': {
         apt::key { 'scout':
-          key        => 'BA012E5E',
+          key        => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
           key_source => 'https://archive.scoutapp.com/scout-archive.key',
         }
 
@@ -49,7 +49,7 @@ class scoutd(
       }
       'Debian': {
         apt::key { 'scout':
-          key        => 'BA012E5E',
+          key        => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
           key_source => 'https://archive.scoutapp.com/scout-archive.key',
         }
 
