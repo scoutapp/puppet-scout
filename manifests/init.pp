@@ -106,14 +106,7 @@ class scoutd(
       require => Package['scoutd']
     }
 
-    file { '/var/lib/scoutd/.scout':
-      ensure  => directory,
-      owner   => 'scoutd',
-      group   => 'scoutd',
-      require => File['/var/lib/scoutd']
-    }
-
-    file { '/etc/scout/scoutd.yml':
+     file { '/etc/scout/scoutd.yml':
       ensure  => present,
       owner   => 'scoutd',
       group   => 'scoutd',
