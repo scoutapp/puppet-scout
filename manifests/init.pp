@@ -38,6 +38,20 @@ class scoutd(
           key_source => 'https://archive.scoutapp.com/scout-archive.key',
         }
 
+        case $::operatingsystemmajrelease {
+          16: {
+            $release = 'xenial'
+          }
+          15: {
+            $release = 'vivid'
+          }
+          /^1[0-4]/: {
+            $release = 'ubuntu'
+          }
+          default: {
+            fail("${::operatingsystemmajrelease} is an unsupported version of Debian on ${::fqdn}")
+          }
+        }
         apt::source { 'scout':
           location    => 'https://archive.scoutapp.com',
           include_src => false,
@@ -106,7 +120,7 @@ class scoutd(
       require => Package['scoutd']
     }
 
-     file { '/etc/scout/scoutd.yml':
+    file { '/etc/scout/scoutd.yml':
       ensure  => present,
       owner   => 'scoutd',
       group   => 'scoutd',
