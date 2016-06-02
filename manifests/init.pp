@@ -110,6 +110,7 @@ class scoutd(
     service { 'scout':
       ensure  => running,
       start   => 'scoutctl restart',
+      status  => 'scoutctl status',
       require => Package['scoutd']
     }
 
