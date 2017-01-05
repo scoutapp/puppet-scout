@@ -39,10 +39,10 @@ class scoutd(
         }
 
         case $::operatingsystemmajrelease {
-          16: {
+          /^16/: {
             $release = 'xenial'
           }
-          15: {
+          /^15/: {
             $release = 'vivid'
           }
           /^1[0-4]/: {
@@ -55,7 +55,7 @@ class scoutd(
         apt::source { 'scout':
           location    => 'https://archive.scoutapp.com',
           include_src => false,
-          release     => 'ubuntu',
+          release     => $release,
           repos       => 'main',
           before      => Package['scoutd'],
           require     => Apt::Key['scout']
