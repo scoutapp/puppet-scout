@@ -1,5 +1,5 @@
 name    'scoutapp-scout'
-version '1.1.0'
+version '1.1.1'
 source 'UNKNOWN'
 author 'scoutapp'
 license 'Apache License, Version 2.0'
