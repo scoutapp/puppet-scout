@@ -1,5 +1,7 @@
 # Scout Puppet Module 
 
+**Note**: This is the older **cron-based Scout agent**. Most likely, you are looking for the new **daemonized Scout agent (scoutd)**. 
+
 Installs the agent for [Scout](http://scoutapp.com), a hosted server monitoring service. This Puppet Module:
 
 * Installs the [Scout Ruby gem](https://rubygems.org/gems/scout)
