@@ -9,3 +9,6 @@ roles: <%= roles.join(',') %>
 <% end -%>
 http_proxy: <%= @http_proxy || '' %>
 https_proxy: <%= @https_proxy || '' %>
+statsd:
+  addr: <%= @statsd_address || '127.0.0.1:8125' %>
+  enabled: <%= @statsd_enabled || true %>

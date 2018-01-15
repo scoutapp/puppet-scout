@@ -19,17 +19,19 @@
 #
 class scoutd(
   $account_key,
-  $hostname      = false,
-  $display_name  = false,
-  $log_file      = false,
-  $ruby_path     = false,
-  $environment   = false,
-  $roles         = false,
-  $http_proxy    = false,
-  $https_proxy   = false,
-  $gems          = false,
-  $ensure        = present,
-  $plugin_pubkey = ''
+  $hostname       = false,
+  $display_name   = false,
+  $log_file       = false,
+  $ruby_path      = false,
+  $environment    = false,
+  $roles          = false,
+  $http_proxy     = false,
+  $https_proxy    = false,
+  $statsd_enabled = false,
+  $statsd_address = false,
+  $gems           = false,
+  $ensure         = present,
+  $plugin_pubkey  = ''
 ) {
   case $::operatingsystem {
       'Ubuntu': {
