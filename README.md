@@ -88,6 +88,16 @@ class {
       <td><code>nil</code></td>
     </tr>
     <tr>
+      <td>statsd_address</td>
+      <td>The interface and port to bind the statsd agent to</td>
+      <td><code>127.0.0.1:8125</code></td>
+    </tr>
+    <tr>
+      <td>statsd_enabled</td>
+      <td>Enable the statsd protocol</td>
+      <td><code>true</code></td>
+    </tr>
+    <tr>
       <td>gems</td>
       <td>An Array of plugin gem dependencies to install. For example, you may want to install the <code>redis</code> gem if this node uses the redis plugin.</td>
       <td><code>nil</code></td>
