@@ -1,6 +1,6 @@
-# Scout Puppet Module 
+# Scout Puppet Module
 
-Installs the agent for [Scout](http://scoutapp.com), a hosted server monitoring service. This Puppet Module:
+Installs the agent for [Pingdom Server Monitor](https://server.pingdom.com), a hosted server monitoring service. This Puppet Module:
 
 * Installs scoutd, the Scout monitoring daemon
 * Runs scoutd
@@ -29,7 +29,7 @@ class {
       <td style="width:15%">account_key</td>
       <td>
         The agent requires a Scout account and the account's associated key. The key can be found in the account settings tab within the Scout UI or in the server setup instructions. The key looks like:
-          <code>0mZ6BD9DR0qyZjaBLCPZZWkW3n2Wn7DV9xp5gQPs</code> 
+          <code>0mZ6BD9DR0qyZjaBLCPZZWkW3n2Wn7DV9xp5gQPs</code>
       </td>
       <td style="width:15%"><code>nil</code></td>
     </tr>

@@ -41,6 +41,9 @@ class scoutd(
         }
 
         case $::operatingsystemmajrelease {
+          /^17/: {
+            $release = 'zesty'
+          }
           /^16/: {
             $release = 'xenial'
           }
@@ -51,7 +54,7 @@ class scoutd(
             $release = 'ubuntu'
           }
           default: {
-            fail("${::operatingsystemmajrelease} is an unsupported version of Debian on ${::fqdn}")
+            fail("${::operatingsystemmajrelease} is an unsupported version of Ubuntu on ${::fqdn}")
           }
         }
         apt::source { 'scout':
