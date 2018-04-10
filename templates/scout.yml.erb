@@ -5,7 +5,7 @@ log_file: <%= @log_file || '' %>
 ruby_path: <%= @ruby_path || '' %>
 environment: <%= @environment || '' %>
 <% if @roles -%>
-roles: <%= roles.join(',') %>
+roles: <%= @roles.join(',') %>
 <% end -%>
 http_proxy: <%= @http_proxy || '' %>
 https_proxy: <%= @https_proxy || '' %>
