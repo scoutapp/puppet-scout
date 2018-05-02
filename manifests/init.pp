@@ -30,7 +30,8 @@ class scoutd(
   $statsd_enabled = false,
   $statsd_address = false,
   $gems           = false,
-  $ensure         = present,
+  $gems_ensure    = latest,
+  $ensure         = latest,
   $plugin_pubkey  = ''
 ) {
   case $::operatingsystem {
@@ -110,7 +111,7 @@ class scoutd(
       }
     }
 
-    package { 'scoutd': ensure => latest }
+    package { 'scoutd': ensure => $ensure }
 
     service { 'scout':
       ensure  => running,
@@ -150,7 +151,7 @@ class scoutd(
     # install any plugin gem dependencies
     if $gems {
       package { $gems:
-        ensure   => latest,
+        ensure   => $gems_ensure,
         provider => gem,
       }
     }
