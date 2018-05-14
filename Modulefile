@@ -3,9 +3,9 @@ version '1.1.3'
 source 'UNKNOWN'
 author 'scoutapp'
 license 'Apache License, Version 2.0'
-summary 'Installs and configures the scoutapp.com scoutd monitoring agent.'
+summary 'Installs and configures the server.pingdom.com monitoring agent.'
 description 'UNKNOWN'
-project_page 'https://github.com/scoutapp/puppet-scout/tree/scoutd'
+project_page 'https://github.com/pingdomserver/puppet-scout'
 
 ## Add dependencies, if any:
 # dependency 'username/name', '>= 1.2.0'

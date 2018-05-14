@@ -69,22 +69,22 @@ class {
     </tr>
     <tr>
       <td>environment</td>
-      <td>Specify the environment, like 'production' or 'staging' this server lives in. See https://www.scoutapp.com/help#overview_of_environments for more details.</td>
+      <td>Specify the environment, like 'production' or 'staging' this server lives in. See https://server-monitor.readme.io/docs/environments for more details.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
       <td>roles</td>
-      <td>An Array of roles for this node. Roles are defined through Scout's UI.</td>
+      <td>An Array of roles for this node. Roles are defined through Pingdom server monitor's UI.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
       <td>http_proxy</td>
-      <td>Set an HTTP proxy if one is required to communicate with the Scoutapp service from your environment.</td>
+      <td>Set an HTTP proxy if one is required to communicate with the Pingdom server monitor service from your environment.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
       <td>https_proxy</td>
-      <td>Set an HTTPS proxy if one is required to communicate with the Scoutapp service from your environment.</td>
+      <td>Set an HTTPS proxy if one is required to communicate with the Pingdom server monitor service from your environment.</td>
       <td><code>nil</code></td>
     </tr>
     <tr>
@@ -112,7 +112,7 @@ class {
 
 ## Questions?
 
-Contact Scout (<support@scoutapp.com>) with any questions, suggestions, bugs, etc.
+Contact Pingdom server monitor (<support@server.pingdom.com>) with any questions, suggestions, bugs, etc.
 
 ## License
 
