@@ -42,6 +42,9 @@ class scoutd(
         }
 
         case $::operatingsystemmajrelease {
+          /^18/: {
+            $release = 'bionic'
+          }
           /^17/: {
             $release = 'zesty'
           }
