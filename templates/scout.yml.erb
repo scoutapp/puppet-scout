@@ -1,14 +1,14 @@
-account_key: <%= @account_key %>
-hostname: <%= @hostname || '' %>
-display_name: <%= @display_name || '' %>
-log_file: <%= @log_file || '' %>
-ruby_path: <%= @ruby_path || '' %>
-environment: <%= @environment || '' %>
-<% if @roles -%>
-roles: <%= @roles.join(',') %>
+account_key: <%= scope['scoutd::account_key'] %>
+hostname: <%= scope['scoutd::hostname'] %>
+display_name: <%= scope['scoutd::display_name'] %>
+log_file: <%= scope['scoutd::log_file'] %>
+ruby_path: <%= scope['scoutd::ruby_path'] %>
+environment: <%= scope['scoutd::environment'] %>
+<% if scope['scoutd::roles'] -%>
+roles: <%= scope['scoutd::roles'].join(',') %>
 <% end -%>
-http_proxy: <%= @http_proxy || '' %>
-https_proxy: <%= @https_proxy || '' %>
+http_proxy: <%= scope['scoutd::http_proxy'] %>
+https_proxy: <%= scope['scoutd::https_proxy'] %>
 statsd:
-  addr: <%= @statsd_address || '127.0.0.1:8125' %>
-  enabled: <%= @statsd_enabled %>
+  addr: <%= scope['scoutd::statsd_address'] %>
+  enabled: <%= scope['scoutd::statsd_enabled'] %>
