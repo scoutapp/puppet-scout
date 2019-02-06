@@ -18,139 +18,97 @@
 # Copyright 2013 Andre Lewis
 #
 class scoutd(
-  $account_key,
-  $hostname       = false,
-  $display_name   = false,
-  $log_file       = false,
-  $ruby_path      = false,
-  $environment    = false,
-  $roles          = false,
-  $http_proxy     = false,
-  $https_proxy    = false,
-  $statsd_enabled = false,
-  $statsd_address = false,
-  $gems           = false,
-  $gems_ensure    = latest,
-  $ensure         = latest,
-  $plugin_pubkey  = ''
+  String $account_key,
+  String $package_name            = 'scoutd',
+  String $ensure                  = latest,
+  Optional[String] $hostname      = $::facts['networking']['hostname'],
+  Optional[String] $display_name  = undef,
+  String $log_file                = '/var/log/scout/scoutd.log',
+  Optional[String] $ruby_path     = undef,
+  Optional[String] $environment   = undef,
+  Array[String] $roles            = [],
+  Optional[String] $http_proxy    = undef,
+  Optional[String] $https_proxy   = undef,
+  Boolean $statsd_enabled         = false,
+  String $statsd_address          = '127.0.0.1:8125',
+  Array[String] $gems             = [],
+  String $gems_ensure             = latest,
+  String $gem_provider            = 'gem',
+  Boolean $service_enable         = true,
+  String $service_ensure          = running,
+  Optional[String] $plugin_pubkey = undef,
+  Boolean $manage_repo            = true,
 ) {
-  case $::operatingsystem {
-      'Ubuntu': {
-        case $::operatingsystemmajrelease {
-          /^18/: {
-            $release = 'bionic'
-          }
-          /^17/: {
-            $release = 'zesty'
-          }
-          /^16/: {
-            $release = 'xenial'
-          }
-          /^15/: {
-            $release = 'vivid'
-          }
-          /^1[0-4]/: {
-            $release = 'ubuntu'
-          }
-          default: {
-            fail("${::operatingsystemmajrelease} is an unsupported version of Ubuntu on ${::fqdn}")
-          }
-        }
-        apt::source { 'scout':
-          location => 'https://archive.server.pingdom.com',
-          key      => {
-            id     => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
-            source => 'https://archive.server.pingdom.com/scout-archive.key',
-          },
-          release  => $release,
-          repos    => 'main',
-        }
-        Class['apt::update'] -> Package['scoutd']
-      }
+  if $manage_repo {
+    case $::facts['os']['family'] {
       'Debian': {
-        case $::operatingsystemmajrelease {
-          8: {
-            $release = 'jessie'
-          }
-          7: {
-            $release = 'wheezy'
-          }
-          default: {
-            fail("${::operatingsystemmajrelease} is an unsupported version of Debian on ${::fqdn}")
-          }
-        }
         apt::source { 'scout':
           location => 'https://archive.server.pingdom.com',
           key      => {
             id     => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
             source => 'https://archive.server.pingdom.com/scout-archive.key',
           },
-          release  => $release,
+          release  => $::facts['os']['distro']['codename'],
           repos    => 'main',
-          before   => Package['scoutd'],
-          require  => Apt::Key['scout']
         }
-        Class['apt::update'] -> Package['scoutd']
+        Class['apt::update'] -> Package[$package_name]
       }
-      'RedHat', 'CentOS': {
+      'RedHat': {
         yumrepo { 'scout':
           baseurl => 'http://archive.server.pingdom.com/rhel/$releasever/main/$basearch/',
           gpgkey  => 'https://archive.server.pingdom.com/RPM-GPG-KEY-scout'
         }
-      }
-      'Fedora': {
-        yumrepo { 'scout':
-          baseurl => 'http://archive.server.pingdom.com/fedora/$releasever/main/$basearch/',
-          gpgkey  => 'https://archive.server.pingdom.com/RPM-GPG-KEY-scout'
-        }
+        Yumrepo['scout'] -> Package[$package_name]
       }
       default: {
-        fail("The operating system family ${::operatingsystem} is not supported by the puppet-scoutd module on ${::fqdn}")
+        fail("The operating system family ${::facts['os']['family']} is not supported by the puppet-scoutd module on ${::fqdn}")
       }
     }
+  }
 
-    package { 'scoutd': ensure => $ensure }
+  package { $package_name:
+    ensure => $ensure
+  }
 
-    service { 'scout':
-      ensure  => running,
-      start   => 'scoutctl restart',
-      status  => 'scoutctl status',
-      require => Package['scoutd']
-    }
+  service { 'scout':
+    ensure  => $service_ensure,
+    enable  => $service_enable,
+    require => Package[$package_name],
+  }
 
-    file { '/var/lib/scoutd':
-      ensure  => directory,
-      owner   => 'scoutd',
-      group   => 'scoutd',
-      require => Package['scoutd']
-    }
+  file { '/var/lib/scoutd':
+    ensure  => directory,
+    owner   => 'scoutd',
+    group   => 'scoutd',
+    require => Package[$package_name]
+  }
 
-    file { '/etc/scout/scoutd.yml':
-      ensure  => present,
-      owner   => 'scoutd',
-      group   => 'scoutd',
-      content => template('scoutd/scout.yml.erb'),
-      require => Package['scoutd'],
-      notify  => Service['scout']
-    }
+  file { '/etc/scout/scoutd.yml':
+    ensure  => present,
+    owner   => 'scoutd',
+    group   => 'scoutd',
+    content => template('scoutd/scout.yml.erb'),
+    require => Package[$package_name],
+    notify  => Service['scout']
+  }
 
-    if ($plugin_pubkey != '') {
-      file { 'scout_plugin_pub_key':
-        ensure  => present,
-        path    => '/var/lib/scoutd/scout_rsa.pub',
-        content => $plugin_pubkey,
-        owner   => 'scoutd',
-        group   => 'scoutd',
-        mode    => '0644',
-        require => Package['scoutd'],
-      }
-    }
+  $plugin_pubkey_ensure = $plugin_pubkey? {
+    undef   => absent,
+    default => present,
+  }
+  file { 'scout_plugin_pub_key':
+    ensure  => $plugin_pubkey_ensure,
+    path    => '/var/lib/scoutd/scout_rsa.pub',
+    content => $plugin_pubkey,
+    owner   => 'scoutd',
+    group   => 'scoutd',
+    mode    => '0644',
+    require => Package[$package_name],
+  }
 
-    # install any plugin gem dependencies
-    if $gems {
-      package { $gems:
-        ensure   => $gems_ensure,
-        provider => gem,
-      }
-    }
+  # install any plugin gem dependencies
+  package { $gems:
+    ensure   => $gems_ensure,
+    provider => $gem_provider,
+  }
 }
