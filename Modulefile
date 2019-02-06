@@ -9,4 +9,4 @@ project_page 'https://github.com/pingdomserver/puppet-scout'
 
 ## Add dependencies, if any:
 # dependency 'username/name', '>= 1.2.0'
-dependency 'puppetlabs/apt'
+dependency 'puppetlabs/apt', '>= 2.0.0'

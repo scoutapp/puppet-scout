@@ -36,11 +36,6 @@ class scoutd(
 ) {
   case $::operatingsystem {
       'Ubuntu': {
-        apt::key { 'scout':
-          key        => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
-          key_source => 'https://archive.server.pingdom.com/scout-archive.key',
-        }
-
         case $::operatingsystemmajrelease {
           /^18/: {
             $release = 'bionic'
@@ -62,20 +57,17 @@ class scoutd(
           }
         }
         apt::source { 'scout':
-          location    => 'https://archive.server.pingdom.com',
-          include_src => false,
-          release     => $release,
-          repos       => 'main',
-          before      => Package['scoutd'],
-          require     => Apt::Key['scout']
+          location => 'https://archive.server.pingdom.com',
+          key      => {
+            id     => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
+            source => 'https://archive.server.pingdom.com/scout-archive.key',
+          },
+          release  => $release,
+          repos    => 'main',
         }
+        Class['apt::update'] -> Package['scoutd']
       }
       'Debian': {
-        apt::key { 'scout':
-          key        => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
-          key_source => 'https://archive.server.pingdom.com/scout-archive.key',
-        }
-
         case $::operatingsystemmajrelease {
           8: {
             $release = 'jessie'
@@ -88,14 +80,17 @@ class scoutd(
           }
         }
         apt::source { 'scout':
-          location    => 'https://archive.server.pingdom.com',
-          include_src => false,
-          release     => $release,
-          repos       => 'main',
-          before      => Package['scoutd'],
-          require     => Apt::Key['scout']
+          location => 'https://archive.server.pingdom.com',
+          key      => {
+            id     => '705372CB1DF3976C44B7B8A6BBE475EBA38683E4',
+            source => 'https://archive.server.pingdom.com/scout-archive.key',
+          },
+          release  => $release,
+          repos    => 'main',
+          before   => Package['scoutd'],
+          require  => Apt::Key['scout']
         }
-
+        Class['apt::update'] -> Package['scoutd']
       }
       'RedHat', 'CentOS': {
         yumrepo { 'scout':
