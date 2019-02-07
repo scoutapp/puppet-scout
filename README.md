@@ -48,44 +48,54 @@ class {
   </thead>
   <tbody>
     <tr>
+      <td>package_name</td>
+      <td>Optional package name to install.</td>
+      <td><code>'scoutd'</code></td>
+    </tr>
+    <tr>
+      <td>ensure</td>
+      <td></td>
+      <td><code>latest</code></td>
+    </tr>
+    <tr>
       <td>hostname</td>
       <td>Optional hostname override for this node.</td>
-      <td><code>nil</code></td>
+      <td><code>$::facts['networking']['hostname']</code></td>
     </tr>
     <tr>
       <td>display_name</td>
       <td>Optional name to display for this node within the Scout UI (defaults to the hostname).</td>
-      <td><code>nil</code></td>
+      <td><code>undef</code></td>
     </tr>
     <tr>
       <td>log_file</td>
       <td>Optional location of the log file.</td>
-      <td><code>nil</code></td>
+      <td><code>/var/log/scout/scoutd.log</code></td>
     </tr>
     <tr>
       <td>ruby_path</td>
       <td>Optional location of the ruby executable.</td>
-      <td><code>nil</code></td>
+      <td><code>undef</code></td>
     </tr>
     <tr>
       <td>environment</td>
       <td>Specify the environment, like 'production' or 'staging' this server lives in. See https://server-monitor.readme.io/docs/environments for more details.</td>
-      <td><code>nil</code></td>
+      <td><code>undef</code></td>
     </tr>
     <tr>
       <td>roles</td>
       <td>An Array of roles for this node. Roles are defined through Pingdom server monitor's UI.</td>
-      <td><code>nil</code></td>
+      <td><code>[]]</code></td>
     </tr>
     <tr>
       <td>http_proxy</td>
       <td>Set an HTTP proxy if one is required to communicate with the Pingdom server monitor service from your environment.</td>
-      <td><code>nil</code></td>
+      <td><code>undef</code></td>
     </tr>
     <tr>
       <td>https_proxy</td>
       <td>Set an HTTPS proxy if one is required to communicate with the Pingdom server monitor service from your environment.</td>
-      <td><code>nil</code></td>
+      <td><code>undef</code></td>
     </tr>
     <tr>
       <td>statsd_address</td>
@@ -95,17 +105,32 @@ class {
     <tr>
       <td>statsd_enabled</td>
       <td>Enable the statsd protocol</td>
-      <td><code>true</code></td>
+      <td><code>false</code></td>
     </tr>
     <tr>
       <td>gems</td>
       <td>An Array of plugin gem dependencies to install. For example, you may want to install the <code>redis</code> gem if this node uses the redis plugin.</td>
-      <td><code>nil</code></td>
+      <td><code>[]</code></td>
+    </tr>
+    <tr>
+      <td>gems_ensure</td>
+      <td>Whether to install gems or not.</td>
+      <td><code>latest</code></td>
+    </tr>
+    <tr>
+      <td>gem_provider</td>
+      <td></td>
+      <td><code>gem</code></td>
     </tr>
     <tr>
       <td>plugin_pubkey</td>
       <td>Content of the private Plugin's public key. When not <code>nil</code>, key file is created in ~/scout_rsa.pub in home directory of user running scout.</td>
-      <td><code>nil</code></td>
+      <td><code>undef</code></td>
+    </tr>
+    <tr>
+      <td>manage_repo</td>
+      <td>Should the module install scout repo?</td>
+      <td><code>true</code></td>
     </tr>
   </tbody>
 </table>
