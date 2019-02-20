@@ -25,9 +25,13 @@ class scoutd::config {
     content => template('scoutd/scout.yml.erb'),
   }
 
-  $plugin_pubkey_ensure = $scoutd::plugin_pubkey? {
-    undef   => absent,
-    default => file,
+  $plugin_pubkey_ensure = $scoutd::ensure? {
+    absent   => absent,
+    'absent' => absent,
+    default  => $scoutd::plugin_pubkey? {
+      undef   => absent,
+      default => file,
+    }
   }
   file { 'scout_plugin_pub_key':
     ensure  => $plugin_pubkey_ensure,
