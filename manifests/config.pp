@@ -9,6 +9,7 @@ class scoutd::config {
   }
   file { '/var/lib/scoutd':
     ensure => $dir_ensure,
+    force  => true,
     owner  => 'scoutd',
     group  => 'scoutd',
   }
